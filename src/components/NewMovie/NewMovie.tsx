@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { TextField } from '../TextField';
 import { Movie } from '../../types/Movie';
-
 
 type Props = {
   onAdd: (movie: Movie) => void;
@@ -20,7 +19,7 @@ const validateUrl = (value: string): string | null => {
   return pattern.test(value) ? null : 'Invalid URL format';
 };
 
-export const NewMovie: React.FC<Props> = ({onAdd}) => {
+export const NewMovie: React.FC<Props> = ({ onAdd }) => {
   const [count, setCount] = useState(0);
 
   // створюємо стейт для кожної форми
@@ -32,11 +31,7 @@ export const NewMovie: React.FC<Props> = ({onAdd}) => {
 
   // перевірка на порожні поля всіх форм підряд
   const isReadyToSubmit = Boolean(
-    title.trim()
-    && description.trim()
-    && imgUrl.trim()
-    && imdbUrl.trim()
-    && imdbId.trim()
+    title.trim() && imgUrl.trim() && imdbUrl.trim() && imdbId.trim(),
   );
 
   // обробник до кожної форми
@@ -47,31 +42,31 @@ export const NewMovie: React.FC<Props> = ({onAdd}) => {
   const handleImdbIdChange = (value: string) => setImdbId(value);
 
   // обробка submit-button
-const handleAddChange = (event: React.FormEvent) => {
-  event.preventDefault();
+  const handleAddChange = (event: React.FormEvent) => {
+    event.preventDefault();
 
-  // cтворюємо новий фільм
-  const NewMoviePage = {
-    title: title.trim(),
-    description: description.trim(),
-    imgUrl: imgUrl.trim(),
-    imdbUrl: imdbUrl.trim(),
-    imdbId: imdbId.trim()
+    // cтворюємо новий фільм
+    const movieToAdd = {
+      title: title.trim(),
+      description: description.trim(),
+      imgUrl: imgUrl.trim(),
+      imdbUrl: imdbUrl.trim(),
+      imdbId: imdbId.trim(),
+    };
+
+    // додаємо новий фільм на сторінку
+    onAdd(movieToAdd);
+
+    //щчищуємо форму після додання фільму
+    setTitle('');
+    setDescription('');
+    setImgUrl('');
+    setImdbUrl('');
+    setImdbId('');
+
+    // Змінюємо ключ для переініціалізації форми (скидання помилок)
+    setCount(prev => prev + 1);
   };
-
-  // додаємо новий фільм на сторінку
-  onAdd(NewMoviePage);
-
-  //щчищуємо форму після додання фільму
-  setTitle('');
-  setDescription('');
-  setImgUrl('');
-  setImdbUrl('');
-  setImdbId('');
-
-  // Змінюємо ключ для переініціалізації форми (скидання помилок)
-  setCount(prev => prev + 1);
-};
 
   return (
     <form className="NewMovie" key={count} onSubmit={handleAddChange}>
@@ -90,7 +85,6 @@ const handleAddChange = (event: React.FormEvent) => {
         label="Description"
         value={description}
         onChange={handleDescriptionChange}
-        required
       />
 
       <TextField
@@ -134,4 +128,3 @@ const handleAddChange = (event: React.FormEvent) => {
     </form>
   );
 };
-

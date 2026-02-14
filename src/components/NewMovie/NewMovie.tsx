@@ -1,7 +1,7 @@
-/* eslint-disable prettier/prettier */
-import Peact, { useState } from 'react';
+import React, { useState } from 'react'
 import { TextField } from '../TextField';
 import { Movie } from '../../types/Movie';
+
 
 type Props = {
   onAdd: (movie: Movie) => void;
@@ -20,7 +20,7 @@ const validateUrl = (value: string): string | null => {
   return pattern.test(value) ? null : 'Invalid URL format';
 };
 
-export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
+export const NewMovie: React.FC<Props> = ({onAdd}) => {
   const [count, setCount] = useState(0);
 
   // створюємо стейт для кожної форми
@@ -31,12 +31,13 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
   const [imdbId, setImdbId] = useState('');
 
   // перевірка на порожні поля всіх форм підряд
-  const isReadyToSubmit =
+  const isReadyToSubmit = Boolean(
     title.trim()
     && description.trim()
     && imgUrl.trim()
     && imdbUrl.trim()
-    && imdbId.trim();
+    && imdbId.trim()
+  );
 
   // обробник до кожної форми
   const handleTitleChange = (value: string) => setTitle(value);
@@ -46,32 +47,31 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
   const handleImdbIdChange = (value: string) => setImdbId(value);
 
   // обробка submit-button
-  const handleAddChange = (event: React.FormEvent) => {
-    event.preventDefault();
+const handleAddChange = (event: React.FormEvent) => {
+  event.preventDefault();
 
-    // cтворюємо новий фільм
-    const NewMoviePage  = {
-
-      title: title.trim(),
-      description: description.trim(),
-      imgUrl: imgUrl.trim(),
-      imdbUrl: imdbUrl.trim(),
-      imdbId: imdbId.trim()
-    };
-
-    // додаємо новий фільм на сторінку
-    onAdd(NewMoviePage);
-
-    //щчищуємо форму після додання фільму
-    setTitle('');
-    setDescription('');
-    setImgUrl('');
-    setImdbUrl('');
-    setImdbId('');
-
-    // Змінюємо ключ для переініціалізації форми (скидання помилок)
-    setCount(prev => prev + 1);
+  // cтворюємо новий фільм
+  const NewMoviePage = {
+    title: title.trim(),
+    description: description.trim(),
+    imgUrl: imgUrl.trim(),
+    imdbUrl: imdbUrl.trim(),
+    imdbId: imdbId.trim()
   };
+
+  // додаємо новий фільм на сторінку
+  onAdd(NewMoviePage);
+
+  //щчищуємо форму після додання фільму
+  setTitle('');
+  setDescription('');
+  setImgUrl('');
+  setImdbUrl('');
+  setImdbId('');
+
+  // Змінюємо ключ для переініціалізації форми (скидання помилок)
+  setCount(prev => prev + 1);
+};
 
   return (
     <form className="NewMovie" key={count} onSubmit={handleAddChange}>
@@ -90,6 +90,7 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
         label="Description"
         value={description}
         onChange={handleDescriptionChange}
+        required
       />
 
       <TextField
@@ -97,6 +98,7 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
         label="Image URL"
         value={imgUrl}
         onChange={handleImgUrlChange}
+        required
         validate={validateUrl}
       />
 
@@ -105,6 +107,7 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
         label="Imdb URL"
         value={imdbUrl}
         onChange={handleImdbUrlChange}
+        required
         validate={validateUrl}
       />
 
@@ -113,6 +116,7 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
         label="Imdb ID"
         value={imdbId}
         onChange={handleImdbIdChange}
+        required
       />
 
       <div className="field is-grouped">
@@ -130,3 +134,4 @@ export const NewMovie: Peact.FC<Props> = ({onAdd}) => {
     </form>
   );
 };
+
